@@ -1,91 +1,232 @@
-<h1>Reference Sequence for Dimensionality-Reduction Technique Comparisons:</h1>
-<video controls width="600">
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Beyond Imitation</title>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no' />
+    <link rel='stylesheet' href='assets/css/main.css' />
+    <noscript>
+      <link rel='stylesheet' href='assets/css/noscript.css' />
+    </noscript>
+  </head>
+  <body class='is-preload'>
 
-    <source src="ref_seq_1750.mp4"
-            type="video/webm">
+    <div id='form-submitted'>Success! Thanks for contacting us.</div>
+    <script src='assets/js/form.js'></script>
 
-    Sorry, your browser doesn't support embedded videos.
-</video>
+    <script type='x-shader/x-vertex' id='vertex-shader'>
+    precision highp float;
 
-<h1>Extended Input Data Sample:</h1>
-<video controls width="600">
+    uniform mat4 modelViewMatrix;
+    uniform mat4 projectionMatrix;
+    uniform float transitionPercent;
+    uniform vec3 cameraPosition;
+    uniform float pointScale;
 
-    <source src="long_input_seq.mp4"
-            type="video/webm">
+    attribute vec3 position;
+    attribute vec3 translation;
+    attribute vec3 target;
+    attribute vec3 color;
 
-    Sorry, your browser doesn't support embedded videos.
-</video>
-<h1>Unconditionally Sampled Sequences from the VAE:</h1>
-<video controls width="600">
+    void main() {
+      vec3 t1 = position;
+      vec3 t2 = target;
+      vec3 pos = mix(t1, t2, clamp(transitionPercent, 0.0, 1.0));
+      vec4 mvPos = modelViewMatrix * vec4(pos, 1.0);
+      gl_Position = projectionMatrix * mvPos;
+    }
+    </script>
 
-    <source src="unconditional_0.mp4"
-            type="video/webm">
+    <script type='x-shader/x-fragment' id='fragment-shader'>
+    precision highp float;
 
-    Sorry, your browser doesn't support embedded videos.
-</video>
-<br>
-<video controls width="600">
+    varying vec3 vColor;
 
-    <source src="unconditional_1.mp4"
-            type="video/webm">
+    void main() {
+      gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    }
+    </script>
 
-    Sorry, your browser doesn't support embedded videos.
-</video>
-<br>
-<video controls width="600">
+    <!-- Wrapper -->
+    <div id='wrapper' class='divided'>
 
-    <source src="unconditional_2.mp4"
-            type="video/webm">
+      <!-- One -->
+      <section class='banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right'>
+        <div class='content'>
+          <h1>Beyond Imitation</h1>
 
-    Sorry, your browser doesn't support embedded videos.
-</video>
-<br>
-<video controls width="600">
+          <p>'<i>I didn’t want to imitate anybody. Any movement I knew, I didn’t want to use</i>.' <span class='quote-attr'>&ndash; Pina Bausch</span></p>
 
-    <source src="unconditional_3.mp4"
-            type="video/webm">
+          <p class='major'>Recent advancements in motion capture and machine learning have created provocative new possibilities in the domain of movement generation. This project fuses expertise in machine learning, dance practice, and particle physics to create open-source tools for the research of experimental dance.</p>
+          <ul class='actions stacked'>
+            <li><a href='#first' class='button big wide smooth-scroll-middle'>Read More</a></li>
+          </ul>
+        </div>
+        <div class='image' id='dance-grid'></div>
+      </section>
 
-    Sorry, your browser doesn't support embedded videos.
-</video>
+      <!-- Two -->
+      <section class='spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in' id='first'>
+        <div class='content'>
+          <h2>Encoding Motion</h2>
+          <p>We have created a suite of publicly-accessible tools for generating novel sequences of choreography as well as tunable variations on input choreographic sequences using recurrent neural network and autoencoder architectures. These methods have been developed using improvisational dance from our team members, recorded using a state-of-the-art motion capture system with a rich density of over 50 datapoints representing the human form.</p>
+          <ul class='actions stacked'>
+            <li><a target='_blank' href='https://github.com/YaleDHLab/dancing-with-robots' class='button'>See the Code</a></li>
+          </ul>
+        </div>
+        <div class='image'>
+          <img src='assets/images/_JTH1104.jpg' alt='' />
+          <div class='image-credit'>Photo Credit: Jessica Todd Harper</div>
+        </div>
+      </section>
 
-<h1>Variational Sequences using Autoencoders:</h1> 
-<br>
-Reference sequence in red; generated variation in gradient color scheme.
-<br>
-<video controls width="600">
+      <!-- Three -->
+      <section class='spotlight style1 orient-left content-align-left image-position-center onscroll-image-fade-in'>
+        <div class='content'>
+          <h2>Our Mission</h2>
+          <p>We develop machine learning-based tools to inform movement-based research. We believe that technology, in conjunction with physical practice, can enhance embodied learning. We are equally interested in ethical, aesthetic, and technical questions. We aim to make kinesthetic experimentation accessible to all.</p>
+          <ul class='actions stacked'>
+            <li><a href='#team' class='button big wide smooth-scroll-middle'>See Our Team</a></li>
+          </ul>
+        </div>
+        <div class='image'>
+          <img src='assets/images/58409941_2341930239161291_8482858359655955881_n.jpg' alt='' />
+          <div class='image-credit'>Photo Credit: Stephanie Anestis</div>
+        </div>
+      </section>
 
-    <source src="variation_4350.mp4"
-            type="video/webm">
+      <section id='try-it'>
+        <div class='spinner'></div>
 
-    Sorry, your browser doesn't support embedded videos.
-</video>
+        <div id='prompt' class='label'>PROMPT</div>
+         <div id='response' class='label'>RESPONSE</div>
 
-<br>
+        <div id='controls'>
+          <div id='controls-content'>
+            <div class='control-row'>
+              <input type='range' min=0 value=30 max=200 id='sigma' onchange='sampleVae()'>
+              <label>Standard Deviation</label>
+            </div>
+            <div class='control-row'>
+              <input type='range' min=0 value=1000 max=10000 id='idx' onchange='sampleVae()'>
+              <label>Prompt Index</label>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<video controls width="600">
- <source src="variation_12600.mp4"
-            type="video/mp4">
-    Sorry, your browser doesn't support embedded videos.
-</video>
+      <!-- Team -->
+      <section class='team' id='team'>
+        <h2>Our Team</h2>
+        <div class='person'>
+          <img src='assets/images/mariel.jpg' />
+          <div class='name'>Mariel Pettee</div>
+          <div class='unit'>Department of Physics</div>
+          <div class='institution'>Yale University</div>
+        </div>
 
-<br>
+        <div class='person'>
+          <img src='assets/images/chase.jpg' />
+          <div class='name'>Chase Shimmin</div>
+          <div class='unit'>Department of Physics</div>
+          <div class='institution'>Yale University</div>
+        </div>
 
-<video controls width="600">
+        <div class='person'>
+          <img src='assets/images/doug.jpg' />
+          <div class='name'>Doug Duhaime</div>
+          <div class='unit'>Digital Humanities Lab</div>
+          <div class='institution'>Yale University</div>
+        </div>
 
-    <source src="variation_24000.mp4"
-            type="video/webm">
+        <div class='person'>
+          <img src='assets/images/ilya.jpg' />
+          <div class='name'>Ilya Vidrin</div>
+          <div class='unit'>Harvard Dance Center</div>
+          <div class='institution'>Harvard University</div>
+        </div>
 
-    Sorry, your browser doesn't support embedded videos.
-</video>
+        <div class='person'>
+          <img src='assets/images/raymond.jpg' />
+          <div class='name'>Raymond Pinto</div>
+          <div class='unit'>Broadway Dancer</div>
+          <div class='institution'>Juilliard Alumnus</div>
+        </div>
+      </section>
 
-<h1> Generated Movement from the LSTM+MDN architecture:</h1>
-<br>
+      <section class='wrapper style1 align-center'>
+        <div class='inner medium'>
+          <h2>Get in touch</h2>
+          <iframe name='hidden-iframe' style='display: none'></iframe>
+          <form method='post' target='hidden-iframe' action='https://script.google.com/macros/s/AKfycbxu8k9NrKNsRJkjFLQP1v0JotK16UDq2YVVgyIGEP3GMA3R0U8N/exec' onsubmit='window.formSubmitted(this)'>
+            <div class='fields'>
+              <div class='field half'>
+                <label for='name'>Name</label>
+                <input type='text' name='name' id='name' value='' />
+              </div>
+              <div class='field half'>
+                <label for='email'>Email</label>
+                <input type='email' name='email' id='email' value='' />
+              </div>
+              <div class='field'>
+                <label for='message'>Message</label>
+                <textarea name='message' id='message' rows='6'></textarea>
+              </div>
+            </div>
+            <ul class='actions special'>
+              <li><input type='submit' name='submit' id='submit' value='Send Message' /></li>
+            </ul>
+          </form>
 
-<video controls width="600">
+        </div>
+      </section>
 
-    <source src="mdn.mp4"
-            type="video/webm">
 
-    Sorry, your browser doesn't support embedded videos.
-</video>
+      <!-- Footer
+      <footer class='wrapper style1 align-center'>
+        <div class='inner'>
+          <ul class='icons'>
+            <li>
+              <a href='https://twitter.com/yaledhlab' class='icon style2 fa-twitter'>
+                <span class='label'>Twitter</span>
+              </a>
+            </li>
+            <li>
+              <a href='https://www.facebook.com/YaleDHLab/' class='icon style2 fa-facebook'>
+                <span class='label'>Facebook</span>
+              </a>
+            </li>
+            <li>
+              <a href='https://www.instagram.com/yaledhlab' class='icon style2 fa-instagram'>
+                <span class='label'>Instagram</span>
+              </a>
+            </li>
+            <li>
+              <a href='mailto:dhlab@yale.edu' class='icon style2 fa-envelope'>
+                <span class='label'>Email</span>
+              </a>
+            </li>
+          </ul>
+          <p>&copy; Beyond Imitation</p>
+        </div>
+      </footer>
+      -->
 
+      <footer />
+
+    </div>
+
+    <!-- Scripts -->
+    <script src='assets/js/jquery.min.js'></script>
+    <script src='assets/js/jquery.scrollex.min.js'></script>
+    <script src='assets/js/jquery.scrolly.min.js'></script>
+    <script src='assets/js/browser.min.js'></script>
+    <script src='assets/js/breakpoints.min.js'></script>
+    <script src='assets/js/util.js'></script>
+    <script src='assets/js/main.js'></script>
+    <script src='assets/js/tweenlite.min.js'></script>
+    <script src='assets/js/three.min.js'></script>
+    <script src='assets/js/dance.js'></script>
+    <script src='assets/js/try-it.js'></script>
+  </body>
+</html>
