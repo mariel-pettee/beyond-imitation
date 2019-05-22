@@ -42,7 +42,7 @@
   };
 
   // globals
-  var frameDuration = 0.1, // decrease to increase dance speed
+  var frameDuration = 0.05, // decrease to increase dance speed (0.1 originally)
       danceDirection = 1.0, // +1 or -1
       dancer,
       data,
